@@ -25,7 +25,6 @@ bindsym $mod+Shift+n exec nautilus
 bindsym $mod+d exec --no-startup-id rofi -show run
 bindsym $mod+Ctrl+m exec pavucontrol
 
-
 # screenshot bindings
 bindsym Print exec --no-startup-id i3-scrot
 bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
@@ -153,7 +152,6 @@ bindsym $mod+6 workspace $ws6
 bindsym $mod+7 workspace $ws7
 bindsym $mod+8 workspace $ws8
 bindsym $mod+9 workspace $ws9
-
 
 bindsym $mod+Shift+1 move container to workspace $ws1
 bindsym $mod+Shift+2 move container to workspace $ws2
