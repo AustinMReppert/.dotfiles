@@ -1,41 +1,39 @@
 # i3 config file (v4)
 
-exec --no-startup-id ~/.screenlayout/dual-monitors.sh
-
-# Use the windows key
+# use the windows key
 set $mod Mod4
 
-#exec xinput set-prop 11 "libinput Scroll Method Enabled" 0 0 1
-
-# Set border styles for new windows
+# set border styles for new windows
 default_border pixel 1
-default_floating_border pixel normal
+default_floating_border normal
 
-# Set the font
+# gaps are a waste of pixels
+gaps inner 0
+gaps outer 0
+
+# set the font
 font xft:URWGothic-Book 11
 
-# Use Mouse+$mod to drag floating windows
+# use Mouse+$mod to drag floating windows
 floating_modifier $mod
 
+# application bindings
 bindsym $mod+Return exec kitty
-bindsym $mod+Shift+q kill; exec notify-send 'killed'
-bindsym $mod+d exec --no-startup-id rofi -show run
-# exec --no-startup-id pulseaudio --start
-bindsym $mod+Ctrl+m exec pavucontrol
-
-# Start Applications
 bindsym $mod+b exec firefox
 bindsym $mod+n exec dolphin
 bindsym $mod+Shift+n exec nautilus
-#bindsym $mod+t exec --no-startup-id pkill compton
-bindsym $mod+Ctrl+t exec --no-startup-id compton -b
-# bindsym $mod+Shift+d --release exec "killall dunst; exec notify-send 'restart dunst'"
+bindsym $mod+d exec --no-startup-id rofi -show run
+bindsym $mod+Ctrl+m exec pavucontrol
+
+
+# screenshot bindings
 bindsym Print exec --no-startup-id i3-scrot
 bindsym $mod+Print --release exec --no-startup-id i3-scrot -w
 bindsym $mod+Shift+Print --release exec --no-startup-id i3-scrot -s
-bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
 
-# focus_follows_mouse no
+# kill bindings
+bindsym $mod+Ctrl+x --release exec --no-startup-id xkill
+bindsym $mod+Shift+q kill; exec dunstify -r 2557 -t 500 'killed'
 
 # change focus
 bindsym $mod+j focus left
@@ -49,12 +47,11 @@ bindsym $mod+Shift+k move down
 bindsym $mod+Shift+l move up
 bindsym $mod+Shift+semicolon move right
 
-bindsym $mod+h split h;exec notify-send 'tile horizontally'
-bindsym $mod+v split v;exec notify-send 'tile vertically'
+bindsym $mod+h split h
+bindsym $mod+v split v
 bindsym $mod+t split toggle
 
 bindsym $mod+f fullscreen toggle
-
 bindsym $mod+Shift+space floating toggle
 
 # change focus between tiling / floating windows
@@ -65,6 +62,77 @@ bindsym $mod+Shift+s sticky toggle
 
 # focus the parent container
 bindsym $mod+a focus parent
+
+# open applications on specific workspaces
+assign [class="discord"] $ws4
+
+# open certain apss in floating/sticky mode
+for_window [class="Nitrogen"] floating enable sticky enable border normal
+for_window [class="Pavucontrol"] floating enable
+
+# reload i3
+bindsym $mod+Shift+r restart
+
+# exit i3 (logs you out of your X session)
+bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+# system bindings
+bindsym $mod+0 mode "$mode_system"
+
+mode "$mode_system" {
+  bindsym l exec --no-startup-id i3exit lock, mode "default"
+  bindsym s exec --no-startup-id i3exit suspend, mode "default"
+  bindsym u exec --no-startup-id i3exit switch_user, mode "default"
+  bindsym e exec --no-startup-id i3exit logout, mode "default"
+  bindsym r exec --no-startup-id i3exit reboot, mode "default"
+  bindsym Shift+s exec --no-startup-id i3exit shutdown, mode "default"
+
+  # exit system mode: "Enter" or "Escape"
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+# misc bindings
+bindsym $mod+s mode "assistant"
+mode "assistant" {
+  bindsym t exec dunstify -a assistant -r 2558 -t 5000 "`date "+%I:%M %p"`", mode "default"
+
+  bindsym v exec dunstify -a assistant -r 2556 -t 500 `pamixer --get-volume-human`, mode "default"
+  bindsym j exec --no-startup-id pamixer -d 5; exec dunstify -a assistant -r 2556 -t 500 `pamixer --get-volume-human`, mode "default"
+  bindsym k exec --no-startup-id pamixer -i 5; exec dunstify -a assistant -r 2556 -t 500 `pamixer --get-volume-human`, mode "default"
+  bindsym m exec --no-startup-id pamixer -t; exec dunstify -a assistant -r 2556 -t 500 `pamixer --get-volume-human`, mode "default"
+
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+bindsym $mod+r mode "resize"
+mode "resize" {
+  bindsym j resize shrink width 5 px or 5 ppt
+  bindsym k resize grow height 5 px or 5 ppt
+  bindsym l resize shrink height 5 px or 5ppt
+  bindsym semicolon resize grow width 5 px or 5 ppt
+
+  bindsym Return mode "default"
+  bindsym Escape mode "default"
+}
+
+# autostart
+exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
+exec --no-startup-id nitrogen --restore; sleep 1; compton -b
+exec_always --no-startup-id fix_xcursor
+exec --no-startup-id fish -c "xrandr --output HDMI-0 --primary --mode 1920x1080 --pos 1920x0 --rotate normal --output DP-0 --off --output DP-1 --off --output DP-2 --off --output DP-3 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-4 --off --output DP-5 --off"
+exec --no-startup-id dunst
+exec dunstify -a assistant -r 2559 -t 60000 "Welcome coffee"
+
+# colors for window decorations
+# class                 border  backgr. text    indicator child_border
+client.focused          #4c7899 #285577 #ffffff #2e9ef4   #FF0000
+client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
+client.unfocused        #333333 #222222 #888888 #292d2e   #222222
+client.urgent           #2f343a #900000 #ffffff #900000   #900000
+client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
+client.background       #ffffff
 
 set $ws1 1
 set $ws2 2
@@ -96,101 +164,3 @@ bindsym $mod+Shift+6 move container to workspace $ws6
 bindsym $mod+Shift+7 move container to workspace $ws7
 bindsym $mod+Shift+8 move container to workspace $ws8
 bindsym $mod+Shift+9 move container to workspace $ws9
-
-# Open applications on specific workspaces
-assign [class="discord"] $ws4
-
-# Set border for all new windows to 1px. Also removes titlebars.
-new_window 1pixel
-
-# Open specific applications in floating mode
-for_window [title="alsamixer"] floating enable border pixel 1
-for_window [class="calamares"] floating enable border normal
-for_window [class="Clipgrab"] floating enable
-for_window [title="File Transfer*"] floating enable
-for_window [class="Galculator"] floating enable border pixel 1
-for_window [class="GParted"] floating enable border normal
-for_window [title="i3_help"] floating enable sticky enable border normal
-for_window [class="Lightdm-settings"] floating enable
-for_window [class="Lxappearance"] floating enable sticky enable border normal
-for_window [class="Manjaro-hello"] floating enable
-for_window [class="Manjaro Settings Manager"] floating enable border normal
-for_window [title="MuseScore: Play Panel"] floating enable
-for_window [class="Nitrogen"] floating enable sticky enable border normal
-for_window [class="Oblogout"] fullscreen enable
-for_window [class="octopi"] floating enable
-for_window [class="Pamac-manager"] floating enable
-for_window [class="Pavucontrol"] floating enable
-for_window [class="qt5ct"] floating enable sticky enable border normal
-for_window [class="Qtconfig-qt4"] floating enable sticky enable border normal
-for_window [class="Simple-scan"] floating enable border normal
-for_window [class="(?i)System-config-printer.py"] floating enable border normal
-for_window [class="Skype"] floating enable border normal
-for_window [class="Timeset-gui"] floating enable border normal
-for_window [class="(?i)virtualbox"] floating enable border normal
-for_window [class="Xfburn"] floating enable
-for_window [title="nm-connection-editor"] floating enable
-# switch to workspace with urgent window automatically
-for_window [urgent=latest] focus
-
-# reload the configuration file
-bindsym $mod+Shift+c reload
-
-# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
-bindsym $mod+Shift+r restart
-
-# exit i3 (logs you out of your X session)
-bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
-
-# Set shut down, restart and locking features
-bindsym $mod+0 mode "$mode_system"
-set $mode_system (l)ock, (e)xit, switch_(u)ser, (s)uspend, (h)ibernate, (r)eboot, (Shift+s)hutdown, b(attery)
-mode "$mode_system" {
-    bindsym l exec --no-startup-id i3exit lock, mode "default"
-    bindsym s exec --no-startup-id i3exit suspend, mode "default"
-    bindsym u exec --no-startup-id i3exit switch_user, mode "default"
-    bindsym e exec --no-startup-id i3exit logout, mode "default"
-
-    bindsym j exec --no-startup-id pactl set-sink-volume 0 -5%
-    bindsym k exec --no-startup-id pactl set-sink-volume 0 +5%
-    bindsym m exec --no-startup-id pactl set-sink-mute 0 toggle
-
-    bindsym r exec --no-startup-id i3exit reboot, mode "default"
-    bindsym b exec --no-startup-id showbat, mode "default"
-    bindsym t exec --no-startup-id notify-send `date "+%I:%M %p"`, mode "default"
-    bindsym Shift+s exec --no-startup-id i3exit shutdown, mode "default"
-
-    # exit system mode: "Enter" or "Escape"
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-
-bindsym $mod+r mode "resize"
-mode "resize" {
-        bindsym j resize shrink width 5 px or 5 ppt
-        bindsym k resize grow height 5 px or 5 ppt
-        bindsym l resize shrink height 5 px or 5 ppt
-        bindsym semicolon resize grow width 5 px or 5 ppt
-
-        bindsym Return mode "default"
-        bindsym Escape mode "default"
-}
-
-# Autostart
-exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-exec --no-startup-id nitrogen --restore; sleep 1; compton -b
-exec --no-startup-id xautolock -time 15 -locker blurlock
-exec_always --no-startup-id fix_xcursor
-
-# Theme colors
-# class                   border  backgr. text    indic.   child_border
-  client.focused          #FF0000 #FF0000 #80FFF9 #FDF6E3
-  client.focused_inactive #2F3D44 #2F3D44 #1ABC9C #454948
-  client.unfocused        #0000FF #0000FF #1ABC9C #454948
-  client.urgent           #CB4B16 #FDF6E3 #1ABC9C #268BD2
-  client.placeholder      #000000 #0c0c0c #ffffff #000000
-  client.background       #2B2C2B
-
-gaps inner 0
-gaps outer 0
-# smart_borders on
