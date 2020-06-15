@@ -1,0 +1,171 @@
+[global]
+
+  monitor = 0
+
+  # show notifications on screen with mouse
+  # follow = mouse
+
+  # the geometry of the window:
+  # [{width}]x{height}[+/-{x}+/-{y}]
+  geometry = "300x5-30+20"
+
+  # show how many messages are currently hidden (because of geometry).
+  indicate_hidden = yes
+
+  # shrink window if it's smaller than the width. will be ignored if width is 0.
+  shrink = no
+
+  # the transparency of the window. range: [0; 100].
+  transparency = 5
+
+  # The height of the entire notification. if the height is smaller
+  # than the font height and padding combined, it will be raised
+  # to the font height and padding.
+  notification_height = 0
+
+  # draw a line of "separator_height" pixel height between two notifications.
+  separator_height = 2
+
+  # padding between text and separator.
+  padding = 8
+
+  # horizontal padding.
+  horizontal_padding = 8
+
+  # defines width in pixels of frame around the notification window.
+  # set to 0 to disable.
+  frame_width = 1
+
+  # defines color of the frame around the notification window.
+  frame_color = "#555555"
+
+  # define a color for the separator.
+  separator_color = frame
+
+  # sort messages by urgency.
+  sort = yes
+
+  # don't remove messages, if the user is idle (no mouse or keyboard input) for longer than idle_threshold seconds.
+  idle_threshold = 120
+
+  ### text ###
+
+  font = Monospace 11
+
+  # the spacing between lines..
+  line_height = 0
+
+  # markup support
+  markup = full
+
+  # the format of the message
+  format = "%a\n%s\n%b"
+
+  # alignment of message text.
+  alignment = left
+
+  # vertical alignment of message text and icon.
+  vertical_alignment = center
+
+  # Show age of message if message is older than show_age_threshold seconds.
+  show_age_threshold = 60
+
+  # split notifications into multiple lines if they don't fit into geometry.
+  word_wrap = yes
+
+  # when word_wrap is set to no, specify where to make an ellipsis in long lines.
+  ellipsize = middle
+
+  # ignore newlines '\n' in notifications.
+  ignore_newline = no
+
+  # stack together notifications with the same content
+  stack_duplicates = true
+
+  # hide the count of stacked notifications with the same content
+  hide_duplicate_count = false
+
+  # display indicators for urls (u) and actions (a).
+  show_indicators = yes
+
+  ### icons ###
+
+  # align icons left/right/off
+  icon_position = left
+
+  # scale small icons up to this size, set to 0 to disable.
+  min_icon_size = 0
+
+  # scale larger icons down to this size, set to 0 to disable
+  max_icon_size = 32
+
+  # paths to default icons.
+  icon_path = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/
+
+  ### History ###
+
+  # should a notification popped up from history be sticky or timeout as if it would normally do.
+  sticky_history = yes
+
+  # maximum amount of notifications kept in history
+  history_length = 20
+
+  ### misc/advanced ###
+
+  # dmenu path.
+  dmenu = /usr/bin/dmenu -p dunst:
+
+  # browser for opening urls in context menu.
+  browser = /usr/bin/firefox -new-tab
+
+  # always run rule-defined scripts, even if the notification is suppressed
+  always_run_script = true
+
+  # define the title of the windows spawned by dunst
+  title = Dunst
+
+  # define the class of the windows spawned by dunst
+  class = Dunst
+
+  # print a notification on startup.
+  startup_notification = false
+
+  # manage dunst's desire for talking
+  verbosity = mesg
+
+  # define the corner radius of the notification window
+  corner_radius = 0
+
+  ### legacy
+
+  # use the Xinerama extension instead of RandR for multi-monitor support
+  force_xinerama = false
+
+  ### mouse
+
+  # defines list of actions for each mouse event
+  mouse_left_click = close_current
+  mouse_middle_click = do_action, close_current
+  mouse_right_click = close_all
+
+
+[urgency_low]
+  background = "#333333"
+  foreground = "#fefefe"
+  timeout = 5
+
+[urgency_normal]
+  background = "#333333"
+  foreground = "#fefefe"
+  timeout = 5
+
+[urgency_critical]
+  background = "#333333"
+  foreground = "#ffffff"
+  frame_color = "#ff0000"
+  timeout = 0
+
+# for messages that do not specify an app name, do not show the app name
+[dunstify]
+  appname = dunstify
+  format = "%s\n%b"
