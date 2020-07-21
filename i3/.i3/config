@@ -121,8 +121,12 @@ exec --no-startup-id /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 exec --no-startup-id nitrogen --restore; sleep 1; compton -b
 #exec_always --no-startup-id fix_xcursor
 exec --no-startup-id fish -c "xrandr --output HDMI-0 --primary --mode 1920x1080 --pos 1920x0 --rotate normal --output DP-0 --off --output DP-1 --off --output DP-2 --off --output DP-3 --mode 1920x1080 --pos 0x0 --rotate normal --output DP-4 --off --output DP-5 --off"
+exec --no-startup-id xmodmap ~/.Xmodmap
 exec --no-startup-id dunst
 exec --no-startup-id dunstify -a assistant -r 2559 -t 60000 "Welcome coffee"
+
+# set certain applications to float
+for_window [class="jetbrains-idea" title="win0"] floating enable;
 
 # colors for window decorations
 # class                 border  backgr. text    indicator child_border
